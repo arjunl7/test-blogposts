@@ -13,25 +13,25 @@ Fumadocs has different parts:
 
 <Cards>
 
-<Card icon={<CpuIcon className="text-purple-300" />} title='Fumadocs Core'>
+<Card  title='Fumadocs Core'>
 
 Handles most of the logic, including document search, content source adapters, and Markdown extensions.
 
 </Card>
 
-<Card icon={<PanelsTopLeft className="text-blue-300" />} title='Fumadocs UI'>
+<Card title='Fumadocs UI'>
 
 The default theme of Fumadocs, it offers a beautiful look for documentation sites and interactive components.
 
 </Card>
 
-<Card icon={<Database />} title='Content Source'>
+<Card title='Content Source'>
 
 The input/source of your content, it can be a CMS, or local data layers like [Content Collections](https://www.content-collections.dev) and [Fumadocs MDX](/docs/mdx), the official content source.
 
 </Card>
 
-<Card icon={<Terminal />} title='Fumadocs CLI'>
+<Card title='Fumadocs CLI'>
 
 A command line tool to install UI components and automate things, useful for customizing layouts.
 
@@ -55,25 +55,23 @@ Create a new app with `create-fumadocs-app`.
 
 Node.js 18 or above required, note that Node.js 23.1 might have problems with Next.js production build.
 
-<Tabs groupId='package-manager' persist items={['npm', 'pnpm', 'yarn', 'bun']}>
 
-```bash tab="npm"
+```bash
 npm create fumadocs-app
 ```
 
-```bash tab="pnpm"
+```bash
 pnpm create fumadocs-app
 ```
 
-```bash tab="yarn"
+```bash
 yarn create fumadocs-app
 ```
 
-```bash tab="bun"
+```bash
 bun create fumadocs-app
 ```
 
-</Tabs>
 
 It will initialize a new fumadocs app.
 Now you can start hacking!
@@ -169,86 +167,6 @@ pnpm fumadocs add
 ## FAQ
 
 Some common questions you may encounter.
-
-<Accordions>
-    <Accordion id='fix-monorepo-styling' title="How to fix stylings not being applied in Monorepo?">
-
-Sometimes, `fumadocs-ui` is not installed in the workspace of your Tailwind CSS configuration file. (e.g. a monorepo setup).
-
-You have to ensure the `fumadocs-ui` package is scanned by Tailwind CSS, and give a correct relative path to `@source`.
-
-For example, add `../../` to point to the `node_modules` folder in root workspace.
-
-        ```css
-        @import 'tailwindcss';
-        @import 'fumadocs-ui/css/neutral.css';
-        @import 'fumadocs-ui/css/preset.css';
-
-        /* [!code --] */
-        @source '../node_modules/fumadocs-ui/dist/**/*.js';
-        /* [!code ++] */
-        @source '../../../node_modules/fumadocs-ui/dist/**/*.js';
-        ```
-
-    </Accordion>
-    <Accordion id='change-base-url' title="How to change the base route of /docs?">
-
-You can change the base route of docs (e.g. from `/docs/page` to `/info/page`).
-Since Fumadocs uses Next.js App Router, you can simply rename the route:
-
-<Files>
-  <Folder name="app/docs" defaultOpen className="opacity-50" disabled>
-    <File name="layout.tsx" />
-  </Folder>
-  <Folder name="app/info" defaultOpen>
-    <File name="layout.tsx" />
-  </Folder>
-</Files>
-
-And tell Fumadocs to use the new route in `source.ts`:
-
-```ts title="source.ts"
-import { createMDXSource } from 'fumadocs-mdx';
-import { loader } from 'fumadocs-core/source';
-import { docs, meta } from '@/.source';
-
-export const source = loader({
-  baseUrl: '/info',
-  source: createMDXSource(docs, meta),
-});
-```
-
-    </Accordion>
-    <Accordion id='dynamic-route' title="It uses Dynamic Route, will it be poor in performance?">
-
-Next.js turns dynamic route into static routes when `generateStaticParams` is configured.
-Hence, it is as fast as static pages.
-
-You can enable Static Exports on Next.js to get a static build output. (Notice that Route Handler doesn't work with static export, you have to configure static search)
-
-    </Accordion>
-    <Accordion id='custom-layout-docs-page' title='How to create a page in /docs without docs layout?'>
-
-Same as managing layouts in Next.js App Router, remove the original MDX file from content directory (`/content/docs`).
-This ensures duplicated pages will not cause errors.
-
-Now, You can add the page to another route group, which isn't a descendant of docs layout.
-
-For example, under your `app` folder:
-
-<Files>
-  <File name="(home)/docs/page.tsx" />
-  <Folder name="docs">
-    <File name="layout.tsx" />
-    <File name="[[...slug]]/page.tsx" />
-  </Folder>
-</Files>
-
-will replace the `/docs` page with your `page.tsx`.
-
-    </Accordion>
-
-</Accordions>
 
 ## Learn More
 
